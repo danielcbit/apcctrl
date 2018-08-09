@@ -176,6 +176,16 @@ bool BrazilUpsDriver::Open()
 	sleep(2);  // without this usleep we can't flush the port buffer (usb-serial converter)
 	tcflush(_ups->fd, TCIFLUSH);
 
+
+	Dmsg(50, "Setando o controle de fluxo com DTR = true e RTS = false\n");
+	int ioctl_status;
+	ioctl(_ups->fd, TIOCMGET, &ioctl_status);
+	Dmsg(199, "Controle de fluxo old (TIOCMGET): %s\n",BrazilUpsDriver::printBits(sizeof(ioctl_status), &ioctl_status));
+	ioctl_status &= ~TIOCM_DTR;
+	ioctl_status &= ~TIOCM_RTS;
+	Dmsg(199, "Controle de fluxo new (TIOCMSET): %s\n",BrazilUpsDriver::printBits(sizeof(ioctl_status), &ioctl_status));
+	ioctl(_ups->fd, TIOCMSET, ioctl_status);
+
 	this->model = 0;			// force to instantiate a model again if there is a model already instantiated
 	return true;
 }
@@ -418,9 +428,9 @@ bool BrazilUpsDriver::Close()
 int BrazilUpsDriver::ReadData(bool getevents)
 {
 	if(getevents){
-		Dmsg(99, "ReadData(true)\n");
+		Dmsg(99, "Lendo a porta USB/Serial. GetEvents = true\n");
 	}else{
-		Dmsg(99, "ReadData(false)\n");
+		Dmsg(99, "Lendo a porta USB/Serial. GetEvents = false\n");
 	}
 
 	/*
@@ -476,6 +486,8 @@ int BrazilUpsDriver::ReadData(bool getevents)
 
 		switch (retval) {
 		case 0:					/* No chars available in TIMER seconds. */
+			Dmsg(199, "No chars available in 10 milliseconds! Continue...\n",wait);
+			usleep(10000);
 			continue;
 		case -1:
 			if (errno == EINTR || errno == EAGAIN) {     /*   assume SIGCHLD */
@@ -629,8 +641,8 @@ bool BrazilUpsDriver::get_capabilities()
 	 * Sugestão de Levi Pereira (https://sourceforge.net/u/leviweb/profile/)
 	 */
 	_ups->UPS_Cap[CI_LoadApparent] = TRUE;
-    _ups->UPS_Cap[CI_OutputCurrent] = TRUE;
-    _ups->UPS_Cap[CI_NomApparent] = TRUE;
+	_ups->UPS_Cap[CI_OutputCurrent] = TRUE;
+	_ups->UPS_Cap[CI_NomApparent] = TRUE;
 
 	write_unlock(_ups);
 	return true;
@@ -849,3 +861,24 @@ unsigned char *BrazilUpsDriver::bufferGet(){
 	return out;
 }
 
+const char *BrazilUpsDriver::printBits(size_t const size, void const * const ptr)
+{
+	unsigned char *in = (unsigned char*) ptr;
+	char *out = (char *)malloc((size * 8) + 1);
+
+	int pos = 0;
+	for (int i = size-1 ; i>=0 ; i--)
+	{
+		for (int j=7 ; j>=0 ; j--)
+		{
+			if(((in[i] >> j) & 1) == 1 ){
+				out[pos] = '1';
+			}else{
+				out[pos] = '0';
+			}
+			pos++;
+		}
+	}
+	out[pos] = '\0';
+	return out;
+}

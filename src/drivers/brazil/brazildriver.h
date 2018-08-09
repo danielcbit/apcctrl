@@ -79,6 +79,7 @@ private:
 	unsigned int  bufferLen();
 	unsigned char *bufferGet();
 
+	static const char *printBits(size_t const size, void const * const ptr);
 };
 
 
