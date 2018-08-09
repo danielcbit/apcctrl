@@ -1,5 +1,10 @@
              Release Notes for ApcCtrl 0.8.x
 
+0.8.16 - 09 de agosto de 2018
+
+	* Para modelos com cabo serial o nobreak realiza o controle de fluxo. Alterados
+	  os bits DTR e RTS para receber dados do nobreak.
+
 0.8.15 - 08 de fevereiro de 2018
 
     * Implementação da leitura da potência aparente do nobreak e da corrente de saída.
