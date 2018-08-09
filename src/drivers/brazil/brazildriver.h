@@ -79,6 +79,9 @@ private:
 	unsigned int  bufferLen();
 	unsigned char *bufferGet();
 
+	void setIOCtlRecv();
+	void setIOCtlSend();
+
 	static const char *printBits(size_t const size, void const * const ptr);
 };
 

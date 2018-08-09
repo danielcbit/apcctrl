@@ -143,7 +143,7 @@ bool BrazilUpsDriver::Open()
 	tcgetattr(_ups->fd, &_oldtio);
 
 	Dmsg(50, "Definindo a newtio\n");
-	_newtio.c_cflag = B9600 | CS8 | CSTOPB | CLOCAL | CREAD;
+	_newtio.c_cflag = B9600 | CS8 | CSTOPB | CLOCAL | CREAD | CRTSCTS;
 	_newtio.c_iflag = IGNPAR;    /* Ignore errors, raw input */
 	_newtio.c_oflag = 0;         /* Raw output */
 	_newtio.c_lflag = 0;         /* No local echo */
@@ -171,24 +171,58 @@ bool BrazilUpsDriver::Open()
 
 	Dmsg(50, "Setando a newtio na porta\n");
 	tcsetattr(_ups->fd, TCSANOW, &_newtio);
+	Dmsg(199, "Newtio enviado: %s\n",BrazilUpsDriver::printBits(sizeof(_newtio), &_newtio));
+	tcgetattr(_ups->fd, &_newtio);
+	Dmsg(199, "Newtio recebido: %s\n",BrazilUpsDriver::printBits(sizeof(_newtio), &_newtio));
 
 	Dmsg(50, "Segundo tcflush\n");
 	sleep(2);  // without this usleep we can't flush the port buffer (usb-serial converter)
 	tcflush(_ups->fd, TCIFLUSH);
 
+	this->setIOCtlRecv();
 
-	Dmsg(50, "Setando o controle de fluxo com DTR = true e RTS = false\n");
-	int ioctl_status;
-	ioctl(_ups->fd, TIOCMGET, &ioctl_status);
-	Dmsg(199, "Controle de fluxo old (TIOCMGET): %s\n",BrazilUpsDriver::printBits(sizeof(ioctl_status), &ioctl_status));
-	ioctl_status &= ~TIOCM_DTR;
-	ioctl_status &= ~TIOCM_RTS;
-	Dmsg(199, "Controle de fluxo new (TIOCMSET): %s\n",BrazilUpsDriver::printBits(sizeof(ioctl_status), &ioctl_status));
-	ioctl(_ups->fd, TIOCMSET, ioctl_status);
+//	this.portaSerial.setRTS(false);
+//	this.portaSerial.setDTR(true);
 
 	this->model = 0;			// force to instantiate a model again if there is a model already instantiated
 	return true;
 }
+void BrazilUpsDriver::setIOCtlRecv(){
+	int ioctl_status;
+
+	ioctl(_ups->fd, TIOCMGET, &ioctl_status);
+	Dmsg(199, "Controle de fluxo old (TIOCMGET): %s\n",BrazilUpsDriver::printBits(sizeof(ioctl_status), &ioctl_status));
+
+	Dmsg(50, "Setando o controle de fluxo com DTR = true e RTS = false\n");
+	ioctl_status &= ~TIOCM_DTR;
+	ioctl_status |= TIOCM_RTS;
+	ioctl(_ups->fd, TIOCMSET, ioctl_status);
+	ioctl_status = 0;
+
+	ioctl(_ups->fd, TIOCMGET, &ioctl_status);
+	Dmsg(199, "Controle de fluxo new (TIOCMGET): %s\n",BrazilUpsDriver::printBits(sizeof(ioctl_status), &ioctl_status));
+}
+void BrazilUpsDriver::setIOCtlSend(){
+	int ioctl_status;
+
+	ioctl(_ups->fd, TIOCMGET, &ioctl_status);
+	Dmsg(199, "Controle de fluxo old (TIOCMGET): %s\n",BrazilUpsDriver::printBits(sizeof(ioctl_status), &ioctl_status));
+
+	Dmsg(50, "Setando o controle de fluxo com DTR = false e RTS = true\n");
+	ioctl_status &= ~TIOCM_RTS;
+	ioctl_status |= TIOCM_DTR;
+	ioctl(_ups->fd, TIOCMSET, ioctl_status);
+	ioctl_status = 0;
+
+	ioctl(_ups->fd, TIOCMGET, &ioctl_status);
+	int count = 0;
+	while(((ioctl_status & TIOCM_CTS) > 0) && count++ < 100){
+		ioctl(_ups->fd, TIOCMGET, &ioctl_status);
+		usleep(10000);
+	}
+	Dmsg(199, "Controle de fluxo new (TIOCMGET): %s\n",BrazilUpsDriver::printBits(sizeof(ioctl_status), &ioctl_status));
+}
+
 bool BrazilUpsDriver::setup()
 {
 	if(this->model != 0){
@@ -254,6 +288,8 @@ bool BrazilUpsDriver::kill_power()
 }
 
 void BrazilUpsDriver::send(unsigned char *cmd, int size){
+	this->setIOCtlSend();
+
 	Dmsg(50, "Buffer to send! len: %02d; data:%s.\n",size,this->strBuffer(cmd,size));
 	tcflush(_ups->fd, TCIFLUSH);
 	char byte;
@@ -261,6 +297,9 @@ void BrazilUpsDriver::send(unsigned char *cmd, int size){
 		byte = cmd[i];
 		write(_ups->fd, &byte, 1);
 	}
+
+	usleep(10000);
+	this->setIOCtlRecv();
 }
 
 bool BrazilUpsDriver::programmation(bool turnoff, unsigned int turnoff_minutes, bool turnon, unsigned int turnon_minutes){
