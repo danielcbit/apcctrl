@@ -144,9 +144,9 @@ bool BrazilUpsDriver::Open()
 
 	Dmsg(50, "Definindo a newtio\n");
 	_newtio.c_cflag = B9600 | CS8 | CSTOPB | CLOCAL | CREAD;
-	_newtio.c_iflag = IGNPAR | INPCK;    /* Ignore errors, raw input */
-	_newtio.c_oflag = 0;         /* Raw output */
-	_newtio.c_lflag = 0;         /* No local echo */
+	_newtio.c_iflag = IGNPAR | INPCK;	/* Ignore errors, raw input */
+	_newtio.c_oflag = 0;				/* Raw output */
+	_newtio.c_lflag = 0;				/* No local echo */
 
 #if defined(HAVE_OPENBSD_OS) || \
 		defined(HAVE_FREEBSD_OS) || \
@@ -171,9 +171,6 @@ bool BrazilUpsDriver::Open()
 
 	Dmsg(50, "Setando a newtio na porta\n");
 	tcsetattr(_ups->fd, TCSANOW, &_newtio);
-	Dmsg(199, "Newtio enviado: %s\n",BrazilUpsDriver::printBits(sizeof(_newtio), &_newtio));
-	tcgetattr(_ups->fd, &_newtio);
-	Dmsg(199, "Newtio recebido: %s\n",BrazilUpsDriver::printBits(sizeof(_newtio), &_newtio));
 
 	Dmsg(50, "Segundo tcflush\n");
 	sleep(2);  // without this usleep we can't flush the port buffer (usb-serial converter)
