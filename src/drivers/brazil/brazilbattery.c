@@ -131,7 +131,7 @@ double BrazilBattery::getBatteryPowerC1Nom(){
 	return this->getBatteryVoltageNom() * this->getBatteryCurrentC1Nom();
 }
 double BrazilBattery::calcBatteryLoadC1(double act_power){
-	double batpower = this->getBatteryVoltageNom() * this->getBatteryCurrentNom() * BrazilBattery::CURRENT_RATE_C1_C20;
+	double batpower = this->getBatteryVoltageNom() * this->getBatteryCurrentC1Nom();
 	return act_power / batpower;
 }
 
