@@ -89,7 +89,7 @@ double BrazilModelSolis1000_b::getBatteryCurrentNom(){
 	return 14;
 }
 double BrazilModelSolis1000_b::getInverterEfficiency(){
-	return 0.7;
+	return 1.2;
 }
 
 char *BrazilModelSolis1000_b::getModelName(){
