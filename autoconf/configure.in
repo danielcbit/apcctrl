@@ -1454,11 +1454,14 @@ Configuration on `date`:
   ****** ATENÇÃO ******
   
   O projeto ApcCtrl necessita da sua ajuda! Informe todos os resultados do seu teste
-  para os desenvolvedores através do site www.apcctrl.com.br. Atualmente apenas os modelos
-  BACK UPS BR 1200VA e 1500VA foram reportados.
+  para os desenvolvedores através do site www.apcctrl.com.br. Modelos atualmente reportados
+  - BACK UPS BR 1200VA
+  - BACK UPS BR 1500VA
+  - BACK UPS BR 2200VA
+  - SMART UPS BR 3000VA
   
   Deixe um review sobre o projeto no link:
-  https://sourceforge.net/projects/apcupsd-brazil/reviews/
+  https://sourceforge.net/projects/apcctrl/reviews/
     
   " > config.out
 
