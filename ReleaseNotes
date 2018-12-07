@@ -1,5 +1,13 @@
              Release Notes for ApcCtrl 0.8.x
 
+0.8.20 - 06 de dezembro de 2018
+
+    * Alteraçao do apctest: Após um desligamento por falta de energia com o uso do apcctrl
+      daemon pode ocorrer, com uma boa frequência, que uma programação de desligamento
+      automático feita durante o desligamento não seja automaticamente cancelada durante
+      a inicialização do apctest. Para corrigir isso, o apctest força o cancelamento nas
+      etapas iniciais.
+      
 0.8.19 - 09 de agosto de 2018
 
 	* Para modelos com cabo serial o nobreak realiza o controle de fluxo. Alterados

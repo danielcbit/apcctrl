@@ -58,15 +58,6 @@ bool BrazilUpsDriver::refresh()
 	return ReadData(false) == SUCCESS ? true : false;
 }
 
-//char *printBuffer(unsigned char* buffer, int len, int first){
-//	static char out[800];
-//	for(int i=0 ; i<len-first && i<99 ; i++){
-//		sprintf (out+8*i," %02d: %03u;",i,*buffer+i+first);
-//	}
-//	return out;
-//}
-
-
 /*
  * Open port
  */
@@ -177,10 +168,6 @@ bool BrazilUpsDriver::Open()
 	tcflush(_ups->fd, TCIFLUSH);
 
 	this->setIOCtlRecv();
-
-	//  Controle de fluxo para recebimento
-	//	serial.RTS = false;
-	//	serial.DTR = true;
 
 	this->model = 0;			// force to instantiate a model again if there is a model already instantiated
 	return true;

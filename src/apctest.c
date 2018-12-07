@@ -3446,6 +3446,22 @@ static void do_brazil_testing(void)
 	char *cmd;
 	int quit = FALSE;
 
+	// 1) Força o desligamento de qualquer programação no carregamento do apctest.
+	// 2) Quando o driver brazil é carregado ele desliga qualquer programaçao desde que as flags
+	//    hibernate_ups ou shutdown_ups não estejam setadas.
+	// 3) Quando o apctest é carregado ele verifica se a flag hibernate_ups está setada. Em caso
+	//    positivo ele encerra o apctest. Ficando a única hipótese com a flag shutdown_ups.
+	// 4) Quando o nobreak passa por um desligamento normal (com o uso do apcctrl daemon) pode ocorrer
+	//    uma programação de desligamento e religamento, que ficará armazenada no nobreak. Dessa forma,
+	//    esse comportamento só ocorrerá em caso de desligamento por falta de rede elétrica. Em sequência,
+	//    a observação da programação pela opção 3 no menu do apctest só ocorrerá se a flag shutdown_ups
+	//    que fará com que o driver brazil não cancele qualquer programação.
+	// 5) Bug detectado por Mauricio Girardi <girardi.mauricio@gmail.com>
+	((BrazilUpsDriver*)(ups)->driver)->programmation(false, 0, false, 0);
+	((BrazilUpsDriver*)(ups)->driver)->turnLineOn(true);
+	((BrazilUpsDriver*)(ups)->driver)->turnOutputOn(true);
+	((BrazilUpsDriver*)(ups)->driver)->turnContinueMode();
+
 	pmsg("Hello, this is the apcctrl Cable Test program.\n"
 			"This part of apctest is for testing APC-Microsol Brazil.\n"
 			"Please select the function you want to perform.\n");
