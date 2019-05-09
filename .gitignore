@@ -1,0 +1,15 @@
+
+.gitignore
+/.autotools
+/.cproject
+/.project
+/.settings/
+/autom4te.cache/
+/config.log
+/config.out
+/config.status
+/src/apcaccess
+/src/apcctrl
+/src/apctest
+
+
