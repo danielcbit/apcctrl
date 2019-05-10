@@ -667,6 +667,10 @@ bool BrazilUpsDriver::get_capabilities()
 	_ups->UPS_Cap[CI_OutputCurrent] = TRUE;
 	_ups->UPS_Cap[CI_NomApparent] = TRUE;
 
+	_ups->UPS_Cap[CI_LoadValue] = TRUE;
+	_ups->UPS_Cap[CI_LoadApparentValue] = TRUE;
+
+
 	write_unlock(_ups);
 	return true;
 }
@@ -769,9 +773,11 @@ bool BrazilUpsDriver::read_volatile_data()
 
 	/* OUTPUT_LOAD */
 	_ups->LoadApparent = this->model->getLoadPowerPercent();
+	_ups->LoadApparentValue = this->model->getOutputPower();
 
 	/* UPS_LOAD */
 	_ups->UPSLoad = this->model->getLoadActivePowerPercent();
+	_ups->UPSLoadValue = this->model->getOutputActivePower();
 
 	/* UPS_TEMP */
 	_ups->UPSTemp = this->model->getTemperature();

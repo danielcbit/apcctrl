@@ -1,5 +1,18 @@
              Release Notes for ApcCtrl 0.8.x
 
+0.8.21 - 10 de maio de 2019
+
+    * Apresentacao da potencia de saida em Watts e VA
+       - A potencia de saida passa a ser apresentada no apcaccess tanto em Watts e
+         VA (Volt * Ampere).
+       - OBSERVACOES IMPORTANTES: os nobreaks nao sao equipamentos de medicao.
+         Nos testes realizados, a potencia de saida em Watts apresentava valores
+         maiores que em VA. Essa condicao nao deveria nunca ocorrer por questoes tecnicas.
+         A potencia em VA (potencia aparente) eh a pura multiplicacao da tensao pela
+         corrente. Ja a potencia real (ativa), medida em Watts, leva em consideracao a
+         fase entre a corrente e a tensao, devendo ser SEMPRE igual ou menor que a
+         potencia aparente.
+
 0.8.20 - 06 de dezembro de 2018
 
     * Alteraçao do apctest: Após um desligamento por falta de energia com o uso do apcctrl
