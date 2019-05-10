@@ -277,7 +277,9 @@ class UPSINFO {
    double LineMin;                 /* min line voltage seen */
    double LineMax;                 /* max line voltage seen */
    double UPSLoad;                 /* output real power load percentage */
+   double UPSLoadValue;            /* output real power load in Watts */
    double LoadApparent;            /* output apparent power load percentage */
+   double LoadApparentValue;       /* output apparent power load in VA */
    double LineFreq;                /* line freq. */
    double LineVoltage;             /* Line Voltage */
    double OutputVoltage;           /* Output Voltage */

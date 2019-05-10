@@ -137,15 +137,15 @@ static const PAIRS table[] = {
    {"NOLOGINDIR", match_str, WHERE(nologinpath), SIZE(nologinpath)},
 
    /* Configuration parameters used during power failures */
-   {"BATTEXPANDER",	  match_int,   WHERE(expander_ampere), 0},
-   {"ANNOY",          match_int,   WHERE(annoy),         0},
-   {"ANNOYDELAY",     match_int,   WHERE(annoydelay),    0},
-   {"ONBATTERYDELAY", match_int,   WHERE(onbattdelay),   0},
-   {"TIMEOUT",        match_int,   WHERE(maxtime),       0},
-   {"NOLOGON",        match_range, WHERE(nologin),       logins},
-   {"BATTERYLEVEL",   match_int,   WHERE(percent),       0},
-   {"MINUTES",        match_int,   WHERE(runtime),       0},
-   {"KILLDELAY",      match_int,   WHERE(killdelay),     0},
+   {"BATTEXPANDER",   match_int,   WHERE(expander_ampere), 0},
+   {"ANNOY",          match_int,   WHERE(annoy),           0},
+   {"ANNOYDELAY",     match_int,   WHERE(annoydelay),      0},
+   {"ONBATTERYDELAY", match_int,   WHERE(onbattdelay),     0},
+   {"TIMEOUT",        match_int,   WHERE(maxtime),         0},
+   {"NOLOGON",        match_range, WHERE(nologin),         logins},
+   {"BATTERYLEVEL",   match_int,   WHERE(percent),         0},
+   {"MINUTES",        match_int,   WHERE(runtime),         0},
+   {"KILLDELAY",      match_int,   WHERE(killdelay),       0},
 
    /* Configuration parmeters for network information server */
    {"NETSERVER", match_index, WHERE(netstats),   onoroff},

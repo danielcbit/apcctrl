@@ -9,8 +9,8 @@
 # package version
 PACKAGE = apcctrl
 DISTNAME = debian
-DISTVER = 8.10
-VERSION = 0.8.15
+DISTVER = 9.9
+VERSION = 0.8.21
 
 #
 # programs needed by compilation
@@ -32,7 +32,7 @@ INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_SCRIPT = ${INSTALL}
 MKINSTALLDIRS = /home/wagner/workspace/apcctrl/autoconf/mkinstalldirs
 CHKCONFIG = /sbin/chkconfig
-RST2HTML := /usr/bin/rst2html
+RST2HTML := 
 RST2PDF := 
 
 # Files and directories (paths)

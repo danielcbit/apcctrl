@@ -181,6 +181,9 @@ enum {
    CI_LoadApparent,
    CI_NomApparent,
 
+   CI_LoadApparentValue,
+   CI_LoadValue,
+
    /* Only seen on the BackUPS Pro USB (so far) */
    CI_BUPBattCapBeforeStartup,  
    CI_BUPDelayBeforeStartup,    

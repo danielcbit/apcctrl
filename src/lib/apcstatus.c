@@ -140,7 +140,13 @@ int output_status(UPSINFO *ups, int sockfd,
       s_write(ups, "LOADPCT  : %.1f Percent\n", ups->UPSLoad);
 
    if (ups->UPS_Cap[CI_LoadApparent])
+      s_write(ups, "LOAD_W   : %.1f Watts\n", ups->UPSLoadValue);
+
+   if (ups->UPS_Cap[CI_LoadApparent])
       s_write(ups, "LOADAPNT : %.1f Percent\n", ups->LoadApparent);
+
+   if (ups->UPS_Cap[CI_LoadApparent])
+      s_write(ups, "LOAD_VA  : %.1f VA\n", ups->LoadApparentValue);
 
    if (ups->UPS_Cap[CI_BATTLEV])
       s_write(ups, "BCHARGE  : %.1f Percent\n", ups->BattChg);
